@@ -1,0 +1,2 @@
+streamlit>=1.36
+dropbox>=11.36
