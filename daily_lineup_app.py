@@ -7,19 +7,18 @@ st.set_page_config(page_title="The Daily Lineup", page_icon="🏅", layout="cent
 
 # ---------------------------------------------------------------------------
 # DROPBOX SETUP
-# Reuses the same Dropbox token pattern as your other CTS Streamlit apps.
-# In Streamlit Cloud -> App settings -> Secrets, add the same DROPBOX_* keys
-# you already use for cts-checkin-form / cts-payment-sheet. If those apps use
-# a refresh-token flow (OAuth refresh token + app key/secret) instead of a
-# single long-lived token, swap the dropbox.Dropbox(...) line below for
-# whatever helper/init code you already have in those repos -- the rest of
-# this app doesn't care how the client is created, only that `dbx` works.
+# Uses the same refresh-token flow as your other CTS Streamlit apps
+# (DROPBOX_APP_KEY / DROPBOX_APP_SECRET / DROPBOX_REFRESH_TOKEN in Secrets).
 # ---------------------------------------------------------------------------
 DROPBOX_PATH = "/CTS-Family/daily-lineup-state.json"
 
 @st.cache_resource
 def get_dbx():
-    return dropbox.Dropbox(st.secrets["DROPBOX_TOKEN"])
+    return dropbox.Dropbox(
+        app_key=st.secrets["DROPBOX_APP_KEY"],
+        app_secret=st.secrets["DROPBOX_APP_SECRET"],
+        oauth2_refresh_token=st.secrets["DROPBOX_REFRESH_TOKEN"],
+    )
 
 dbx = get_dbx()
 
