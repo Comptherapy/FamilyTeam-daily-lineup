@@ -135,7 +135,7 @@ def checklist_block(section_key, items, day_dict, prefix):
     done_count = 0
     for i, label in enumerate(items):
         key = f"{prefix}{i}"
-        checked = st.checkbox(label, value=day_dict.get(key, False), key=f"{today_iso}-{key}")
+        checked = st.checkbox(label, value=day_dict.get(key, False), key=f"{today_iso}-{section_key}-{key}")
         if checked != day_dict.get(key, False):
             day_dict[key] = checked
             persist()
