@@ -1,15 +1,9 @@
 import streamlit as st
 import lineup_config as cfg
+import theme
 
 st.set_page_config(page_title="Football Practice", page_icon="🏈", layout="centered")
-
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap');
-.stApp { background-color: #0F1A30; color: #F4F1EA; }
-h1, h2, h3 { font-family: 'Oswald', sans-serif !important; text-transform: uppercase; letter-spacing: 0.5px; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(theme.CSS, unsafe_allow_html=True)
 
 st.title("Football practice")
 st.caption("Gear check — before you walk out the door")
