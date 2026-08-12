@@ -3,9 +3,14 @@ import dropbox
 import json
 from datetime import datetime, timedelta
 import lineup_config as cfg
+import theme
 
 st.set_page_config(page_title="The Daily Lineup", page_icon="🏅", layout="centered")
+st.markdown(theme.CSS, unsafe_allow_html=True)
 
+# ---------------------------------------------------------------------------
+# DROPBOX SETUP (daily state — checklist item text now lives in lineup_config.py)
+# ---------------------------------------------------------------------------
 DROPBOX_PATH = "/CTS-Family/daily-lineup-state.json"
 dbx = cfg.get_dbx()
 
@@ -17,6 +22,7 @@ def load_state():
         return {"days": {}}
 
 def save_state(state):
+    # Keep only the last 21 days so the file doesn't grow forever
     cutoff = (datetime.now() - timedelta(days=21)).strftime("%Y-%m-%d")
     state["days"] = {d: v for d, v in state["days"].items() if d >= cutoff}
     dbx.files_upload(
@@ -26,35 +32,22 @@ def save_state(state):
     )
 
 # ---------------------------------------------------------------------------
-# THEME
-# ---------------------------------------------------------------------------
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Space+Mono:wght@400;700&display=swap');
-.stApp { background-color: #0F1A30; color: #F4F1EA; }
-h1, h2, h3 { font-family: 'Oswald', sans-serif !important; text-transform: uppercase; letter-spacing: 0.5px; }
-.streak-box { display:inline-block; width:14%; text-align:center; padding:8px 2px; border-radius:6px;
-  border:1px solid #2A3D68; background:#1F2E52; margin-right:4px; }
-.streak-done { border-color:#4CAF6D; }
-.streak-today { border-color:#FFC145; }
-.dot { width:12px; height:12px; border-radius:50%; background:#2A3D68; margin:6px auto 0; }
-.dot-done { background:#4CAF6D; }
-.small-note { font-family:'Space Mono', monospace; font-size:12px; color:#B9C0D4; }
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------------------------------------------------------------------
-# CHECKLIST DEFINITIONS
+# CHECKLIST DEFINITIONS — loaded from Dropbox via lineup_config.py
+# Edit these anytime from the "Manage Lineup" page in the sidebar.
 # ---------------------------------------------------------------------------
 _lineup = cfg.load_config()
 AM_REQUIRED = _lineup["am_required"]
 AM_SPORT = _lineup["am_sport"]
 AM_LAST = _lineup["am_last"]
 AM_BONUS = _lineup["am_bonus"]
+
 AFTER_REQUIRED = _lineup["after_required"]
 AFTER_BONUS = _lineup["after_bonus"]
+
 PM_REQUIRED = _lineup["pm_required"]
+
 COACH_REQUIRED = _lineup["coach_required"]
+
 WEEK_LABELS = ["M", "T", "W", "T", "F"]
 
 # ---------------------------------------------------------------------------
