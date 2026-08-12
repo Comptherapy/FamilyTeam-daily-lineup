@@ -1,4 +1,5 @@
 import streamlit as st
+import lineup_config as cfg
 
 st.set_page_config(page_title="Football Game", page_icon="🏈", layout="centered")
 
@@ -12,17 +13,8 @@ h1, h2, h3 { font-family: 'Oswald', sans-serif !important; text-transform: upper
 
 st.title("Football game")
 st.caption("Gear check — before you walk out the door")
-st.caption("Starter list — tell your parent if anything's missing or extra so it can be fixed.")
 
-ITEMS = [
-    "Game jersey",
-    "Helmet",
-    "Shoulder pads",
-    "Game pants",
-    "Cleats",
-    "Mouthguard",
-    "Water bottle, filled",
-]
+ITEMS = cfg.load_config()["sport_football_game"]
 
 done = 0
 for i, item in enumerate(ITEMS):
