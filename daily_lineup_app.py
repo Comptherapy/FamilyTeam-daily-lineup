@@ -2,25 +2,12 @@ import streamlit as st
 import dropbox
 import json
 from datetime import datetime, timedelta
+import lineup_config as cfg
 
 st.set_page_config(page_title="The Daily Lineup", page_icon="🏅", layout="centered")
 
-# ---------------------------------------------------------------------------
-# DROPBOX SETUP
-# Uses the same refresh-token flow as your other CTS Streamlit apps
-# (DROPBOX_APP_KEY / DROPBOX_APP_SECRET / DROPBOX_REFRESH_TOKEN in Secrets).
-# ---------------------------------------------------------------------------
 DROPBOX_PATH = "/CTS-Family/daily-lineup-state.json"
-
-@st.cache_resource
-def get_dbx():
-    return dropbox.Dropbox(
-        app_key=st.secrets["DROPBOX_APP_KEY"],
-        app_secret=st.secrets["DROPBOX_APP_SECRET"],
-        oauth2_refresh_token=st.secrets["DROPBOX_REFRESH_TOKEN"],
-    )
-
-dbx = get_dbx()
+dbx = cfg.get_dbx()
 
 def load_state():
     try:
@@ -30,7 +17,6 @@ def load_state():
         return {"days": {}}
 
 def save_state(state):
-    # Keep only the last 21 days so the file doesn't grow forever
     cutoff = (datetime.now() - timedelta(days=21)).strftime("%Y-%m-%d")
     state["days"] = {d: v for d, v in state["days"].items() if d >= cutoff}
     dbx.files_upload(
@@ -60,30 +46,15 @@ h1, h2, h3 { font-family: 'Oswald', sans-serif !important; text-transform: upper
 # ---------------------------------------------------------------------------
 # CHECKLIST DEFINITIONS
 # ---------------------------------------------------------------------------
-AM_REQUIRED = [
-    "Wake up when the alarm goes off", "Use the restroom", "Get dressed", "Put on shoes",
-    "Brush teeth", "Fix hair", "Contacts in / glasses on", "Take vitamins", "Eat breakfast",
-    "Backpack check: homework folder", "Water bottle packed",
-]
-AM_SPORT = ["Sports items checked"]
-AM_LAST = ["In the car on time"]
-AM_BONUS = ["Watch SportsCenter", "Free time"]
-
-AFTER_REQUIRED = ["Finish homework", "Complete reading", "Eat snack"]
-AFTER_BONUS = ["Play in the back of the clinic", "Screen time"]
-
-PM_REQUIRED = [
-    "Clean out trash and bring in school/sport items from the car",
-    "Finish any leftover homework or study", "Eat dinner", "Feed Rudy", "Shower",
-    "Brush teeth", "Put dirty clothes in the hamper", "Lay out tomorrow's clothes",
-    "Pack tomorrow's practice or game clothes/gear",
-    "Fill water bottle and put it in the fridge", "Tidy living space",
-]
-
-COACH_REQUIRED = [
-    "Shower", "Get ready", "Brush teeth", "Pack work items", "Eat breakfast", "Exercise",
-]
-
+_lineup = cfg.load_config()
+AM_REQUIRED = _lineup["am_required"]
+AM_SPORT = _lineup["am_sport"]
+AM_LAST = _lineup["am_last"]
+AM_BONUS = _lineup["am_bonus"]
+AFTER_REQUIRED = _lineup["after_required"]
+AFTER_BONUS = _lineup["after_bonus"]
+PM_REQUIRED = _lineup["pm_required"]
+COACH_REQUIRED = _lineup["coach_required"]
 WEEK_LABELS = ["M", "T", "W", "T", "F"]
 
 # ---------------------------------------------------------------------------
