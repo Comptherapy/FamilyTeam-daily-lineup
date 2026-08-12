@@ -50,41 +50,4 @@ p, span, label, div, li {{
   font-family: 'Nunito', sans-serif;
 }}
 
-[data-testid="stCheckbox"] label p {{
-  font-size: 16px !important;
-  font-weight: 700 !important;
-}}
-
-[data-testid="stCheckbox"] span[role="checkbox"] {{
-  border: 2px solid var(--ink) !important;
-  border-radius: 6px !important;
-}}
-
-.stTabs [data-baseweb="tab"] {{
-  font-family: 'Baloo 2', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 15px !important;
-}}
-
-.section-header-wrap {{
-  margin: 18px 0 10px 0;
-}}
-
-.section-tag {{
-  display:inline-block; font-family:'Baloo 2', sans-serif; font-size:12px;
-  padding:4px 10px; border-radius:8px; font-weight:700; border:2px solid var(--ink);
-}}
-.tag-lineup {{ background: var(--sky); color: var(--ink); }}
-.tag-bonus {{ background: var(--mustard); color: var(--ink); }}
-
-.streak-box {{
-  display:inline-block; width:14%; text-align:center; padding:8px 2px; border-radius:10px;
-  border:2px solid var(--ink); background: var(--white); margin-right:4px;
-}}
-.streak-done {{ background: var(--mint); }}
-.streak-today {{ border-color: var(--orange); border-width:3px; }}
-.dot {{ width:12px; height:12px; border-radius:50%; background:#D8D8D8; margin:6px auto 0; }}
-.dot-done {{ background: var(--success); }}
-.small-note {{ font-family:'Baloo 2', sans-serif; font-size:12px; color: var(--ink-soft); }}
-</style>
-"""
+[data-testid="stCheckbox"] label p
