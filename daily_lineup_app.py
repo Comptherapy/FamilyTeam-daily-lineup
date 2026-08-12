@@ -68,6 +68,15 @@ day_state = st.session_state.full_state["days"].setdefault(today_iso, {
 def persist():
     save_state(st.session_state.full_state)
 
+def section_header(tag_text, tag_class, title_text):
+    st.markdown(
+        f'<div class="section-header-wrap">'
+        f'<span class="section-tag {tag_class}">{tag_text}</span>'
+        f'<h3 style="margin:6px 0 0 0;">{title_text}</h3>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
 # ---------------------------------------------------------------------------
 # HEADER
 # ---------------------------------------------------------------------------
@@ -108,32 +117,32 @@ def checklist_block(section_key, items, day_dict, prefix):
     return done_count
 
 with tab_am:
-    st.subheader("Starting lineup — have to")
+    section_header("STARTING LINEUP", "tag-lineup", "Have to")
     am_items = AM_REQUIRED + (AM_SPORT if gameday else []) + AM_LAST
     done = checklist_block("am", am_items, day_state["am"], "req")
     total = len(am_items)
     st.progress(done / total if total else 0, text=f"{done} / {total}")
 
-    st.subheader("Bonus round — want to, if time's left")
+    section_header("BONUS ROUND", "tag-bonus", "Want to, if time's left")
     if done == total and total > 0:
         checklist_block("am", AM_BONUS, day_state["am"], "bonus")
     else:
         st.caption("Finish the starting lineup to unlock.")
 
 with tab_after:
-    st.subheader("Halftime lineup — have to, at the clinic")
+    section_header("HALFTIME LINEUP", "tag-lineup", "Have to, at the clinic")
     done = checklist_block("after", AFTER_REQUIRED, day_state["after"], "req")
     total = len(AFTER_REQUIRED)
     st.progress(done / total if total else 0, text=f"{done} / {total}")
 
-    st.subheader("Bonus round — want to, if time's left")
+    section_header("BONUS ROUND", "tag-bonus", "Want to, if time's left")
     if done == total and total > 0:
         checklist_block("after", AFTER_BONUS, day_state["after"], "bonus")
     else:
         st.caption("Finish the halftime lineup to unlock.")
 
 with tab_pm:
-    st.subheader("Closing lineup — have to, after practice/game")
+    section_header("CLOSING LINEUP", "tag-lineup", "Have to, after practice/game")
     done = checklist_block("pm", PM_REQUIRED, day_state["pm"], "req")
     total = len(PM_REQUIRED)
     st.progress(done / total if total else 0, text=f"{done} / {total}")
@@ -143,7 +152,7 @@ with tab_pm:
         day_state["pm_complete"] = complete
         persist()
 
-    st.subheader("Friday only, if the week was a success")
+    section_header("FRIDAY ONLY", "tag-bonus", "If the week was a success")
     mon_thu_done = all(
         st.session_state.full_state["days"].get(wd, {}).get("pm_complete", False)
         for wd in week_dates[:4]
@@ -161,7 +170,7 @@ with tab_pm:
         st.caption(f"This week: {done_count} / 5 closing lineups done. Needs all 5 to unlock.")
 
 with tab_coach:
-    st.subheader("Coach's list — your own routine")
+    section_header("COACH'S LIST", "tag-lineup", "Your own routine")
     coach_state = st.session_state.full_state["days"][today_iso].setdefault("coach", {})
     checklist_block("coach", COACH_REQUIRED, coach_state, "req")
     st.caption('Doing this next to his list, out loud, is the point — not checking it perfectly.')
