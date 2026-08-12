@@ -40,7 +40,7 @@ CSS = f"""
   color: var(--ink);
 }}
 
-h1, h2, h3 {{
+h1, h2, h3, [data-testid="stHeading"] h1, [data-testid="stHeading"] h2, [data-testid="stHeading"] h3 {{
   font-family: 'Baloo 2', sans-serif !important;
   color: var(--ink) !important;
   font-weight: 800 !important;
@@ -48,6 +48,26 @@ h1, h2, h3 {{
 
 p, span, label, div, li {{
   font-family: 'Nunito', sans-serif;
+}}
+
+[data-testid="stCheckbox"] label p {{
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}}
+
+[data-testid="stCheckbox"] span[role="checkbox"] {{
+  border: 2px solid var(--ink) !important;
+  border-radius: 6px !important;
+}}
+
+.stTabs [data-baseweb="tab"] {{
+  font-family: 'Baloo 2', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+}}
+
+.section-header-wrap {{
+  margin: 18px 0 10px 0;
 }}
 
 .section-tag {{
